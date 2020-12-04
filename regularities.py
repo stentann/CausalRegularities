@@ -40,7 +40,7 @@ dataReader = open(fileName, "r")
 dataSet = {}
 lineCount = 0
 columns = {}
-effects = {}
+effects = []
 for line in dataReader :
     dataSet[lineCount] = line
     if lineCount == 0 :
@@ -78,11 +78,12 @@ for rowVal1, rowData1 in columns.items():
                 if matches.issuperset(conditions) :
                     valid = False
                     break
+                #checks if previously added elements are supersets
                 if matches.issubset(conditions) :
                     minus.remove(conditions)
             if valid:
                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
                     minus.append(matches)
                     
-                    
+       
 print(minus)

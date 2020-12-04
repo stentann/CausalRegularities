@@ -34,8 +34,8 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
 
 
 #load data
-#fileName = input("Enter the name of your dataset: ")
-fileName = 'testFile.txt'
+fileName = input("Enter the name of your dataset: ")
+#fileName = 'testFile.txt'
 dataReader = open(fileName, "r")
 dataSet = {}
 lineCount = 0

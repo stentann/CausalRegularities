@@ -13,6 +13,8 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
             if int(lineElements[effectIndex + 1]) == -1:
                 #if all inus are met, the minus condition is proven false
                 inusMet = 0
+                print("Condition:")
+                print(condition)
                 for inus in condition:
                     elementNumber = 0
                     for lineElement in lineElements:
@@ -89,9 +91,10 @@ print(minus)
 for condition in minus :
     for effect in condition:
         newList = condition.remove(effect)
-        conditionHolds = basicMinusConditionTest(newList, dataSet, effects, chosen_effect)
-        if conditionHolds : #minus condition holds without this element (remove from minus condition list - not necessary)
-            condition.remove(effect)
+        if(len(newList) != 0) :
+            conditionHolds = basicMinusConditionTest(newList, dataSet, effects, chosen_effect)
+            if conditionHolds : #minus condition holds without this element (remove from minus condition list - not necessary)
+                condition.remove(effect)
 
 #test that above method works
 for minusCondition in minus:

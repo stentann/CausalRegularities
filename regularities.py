@@ -90,8 +90,9 @@ print(minus)
 #Returns new/updated list of minus conditions
 for condition in minus :
     for effect in condition:
-        newList = condition.remove(effect)
-        if(len(newList) != 0) :
+        newList = condition.copy()
+        newList.remove(effect)
+        if len(newList) != 0 :
             conditionHolds = basicMinusConditionTest(newList, dataSet, effects, chosen_effect)
             if conditionHolds : #minus condition holds without this element (remove from minus condition list - not necessary)
                 condition.remove(effect)

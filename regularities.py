@@ -13,8 +13,8 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
             if int(lineElements[effectIndex + 1]) == -1:
                 #if all inus are met, the minus condition is proven false
                 inusMet = 0
-                print("Condition:")
-                print(condition)
+                #print("Condition:")
+                #print(condition)
                 for inus in condition:
                     elementNumber = 0
                     for lineElement in lineElements:
@@ -58,7 +58,6 @@ for line in dataReader :
         columns[newline[0]] = newDict
     lineCount = lineCount + 1
 print(effects)
-#print(columns)
 
 chosen_effect = input("Enter the desired effect: ")
 
@@ -85,17 +84,22 @@ for rowVal1, rowData1 in columns.items():
             if valid:
                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
                     minus.append(matches)
-print(minus)
+
 #N (necessary) portion: For each minus condition generated, test whether each element is necessary or not
 #Returns new/updated list of minus conditions
-for condition in minus :
-    for effect in condition:
-        newList = condition.copy()
-        newList.remove(effect)
-        if len(newList) != 0 :
-            conditionHolds = basicMinusConditionTest(newList, dataSet, effects, chosen_effect)
-            if conditionHolds : #minus condition holds without this element (remove from minus condition list - not necessary)
-                condition.remove(effect)
+finished = True
+while not finished:
+    for condition in minus:
+        for effect in condition:
+            newList = condition.copy()
+            newList.remove(effect)
+            if len(newList) != 0:
+                conditionHolds = basicMinusConditionTest(newList, dataSet, effects, chosen_effect)
+                if conditionHolds:  #minus condition holds without this element (remove from minus condition list - not necessary)
+                    condition.remove(effect)
+                    finished = False
+                    break
+
 
 #test that above method works
 for minusCondition in minus:

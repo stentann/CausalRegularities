@@ -34,8 +34,8 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
 
 
 #load data
-fileName = input("Enter the name of your dataset: ")
-#fileName = 'testFile.txt'
+#fileName = input("Enter the name of your dataset: ")
+fileName = 'testFile.txt'
 dataReader = open(fileName, "r")
 dataSet = {}
 lineCount = 0
@@ -62,6 +62,7 @@ chosen_effect = input("Enter the desired effect: ")
 
 
 minus = []
+print(columns.items())
 for rowVal1, rowData1 in columns.items():
     for rowVal2, rowData2 in columns.items():
         if rowData1[chosen_effect] == rowData2[chosen_effect] and rowVal1 != rowVal2 and rowData1[chosen_effect] > 0 and rowData2[chosen_effect] > 0:
@@ -74,8 +75,10 @@ for rowVal1, rowData1 in columns.items():
                         matches.add(effect)
             #don't add if a super-set
             valid = True
-            for conditions in minus:
-                if matches.issuperset(conditions) :
+            minus_temp = minus.copy()
+            for conditions in minus_temp:
+                print(matches)
+                if matches.issuperset(conditions):
                     valid = False
                     break
                 #checks if previously added elements are supersets
@@ -85,5 +88,5 @@ for rowVal1, rowData1 in columns.items():
                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
                     minus.append(matches)
                     
-       
+
 print(minus)

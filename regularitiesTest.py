@@ -1,5 +1,29 @@
+import regularities
+
+def basicMinusConditionTestUnitTest():
+    testPassed = True
+    #large dataset test
+    data, predicates = regularities.getDataset("testfile.txt")
+
+    #choose effect
+    chosenEffet = "Q"
+    #create various testable minus conditions
+    failingMinusConditions = [{"~P"}, {"P"}, {"~U"}, {"U"}, {"P", "~R"}, {"P", "R", "S", "~T", "U"},
+                              {"~P", "R", "~S", "T", "~U"}]
+
+    passingMinusConditions = [{"P", "~R", "~S", "~T"}, {"R", "~S", "~T"}, {"P", "R", "~S", "~T", "U"}]
+
+    for minusCondition in failingMinusConditions:
+        if regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
+            testPassed = False
+    for minusCondition in passingMinusConditions:
+        if not regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
+            testPassed = False
+    return testPassed
+
 def main():
-    test0 = False
-    print("test 0 passed: ", test0)
+
+    basicMinusConditionTestUnitTestPassed = basicMinusConditionTestUnitTest()
+    print("basicMinusConditionTestUnitTest\npassed: ", basicMinusConditionTestUnitTestPassed)
 
 main()

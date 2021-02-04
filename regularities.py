@@ -62,31 +62,85 @@ chosen_effect = input("Enter the desired effect: ")
 
 
 minus = []
-print(columns.items())
+#print(columns.items())
+positive_row = []
+
 for rowVal1, rowData1 in columns.items():
-    for rowVal2, rowData2 in columns.items():
-        if rowData1[chosen_effect] == rowData2[chosen_effect] and rowVal1 != rowVal2 and rowData1[chosen_effect] > 0 and rowData2[chosen_effect] > 0:
-            matches = set()
-            for effect in effects:
-                if rowData1[effect] == rowData2[effect] and effect != chosen_effect:
-                    if rowData1[effect] < 0:
-                        matches.add(('~' + effect))
-                    else:
-                        matches.add(effect)
-            #don't add if a super-set
-            valid = True
-            minus_temp = minus.copy()
-            for conditions in minus_temp:
-                print(matches)
-                if matches.issuperset(conditions):
-                    valid = False
-                    break
-                #checks if previously added elements are supersets
-                if matches.issubset(conditions) :
-                    minus.remove(conditions)
-            if valid:
-                if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
-                    minus.append(matches)
+    if rowData1[chosen_effect] == 1:
+        positive_row.append(rowVal1)
+    
+#P: ~Q, T, ~U
+#R: S, ~Q
+
+
+#cur_val = columns[positive_row[0]][effects[0]]
+#print(cur_val)
+#flag = 0
+matchset = set()
+for effect in effects:
+    if effect != chosen_effect:
+        cur_val = columns[positive_row[0]][effect] # set value -1 or 1
+        #matchset = set() #individual matches
+        flag = 0
+        #iterate through a columns row, raise flag if values do not equal
+        for row in positive_row:
+            rowMatch = set()
+            if flag == 0:
+                temp = columns[row][effect]
+                if temp != cur_val:
+                    flag = 1
+            #cur_val = temp
+        if flag == 0:
+            if cur_val > 0:
+                matchset.add(effect)
+            else:
+                matchset.add(('~' + effect))
+
+    matches = set()
+    for match in matchset:
+        matches.add(match)   
+
+    print("Match: ",matchset)
+
+    #don't add if a super-set
+    valid = True
+    minus_temp = minus.copy()
+    for conditions in minus_temp:
+        #print(matches)
+        if matches.issuperset(conditions):
+            valid = False
+            break
+        #checks if previously added elements are supersets
+        if matches.issubset(conditions) :
+            minus.remove(conditions)
+    if valid:
+        if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
+            minus.append(matches)
+
+
+#     for rowVal2, rowData2 in columns.items():
+#         if rowData1[chosen_effect] > 0 and rowData2[chosen_effect] > 0 and rowVal1 != rowVal2:
+#             matches = set()
+#             for effect in effects:
+#                 if rowData1[effect] == rowData2[effect] and effect != chosen_effect:
+#                     if rowData1[effect] < 0:
+#                         matches.add(('~' + effect))
+#                     else:
+#                         matches.add(effect)
+#             #don't add if a super-set
+#             valid = True
+#             minus_temp = minus.copy()
+#             for conditions in minus_temp:
+#                 print(matches)
+#                 if matches.issuperset(conditions):
+#                     valid = False
+#                     break
+#                 #checks if previously added elements are supersets
+#                 if matches.issubset(conditions) :
+#                     minus.remove(conditions)
+#             if valid:
+#                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
+#                     minus.append(matches)
                     
 
-print(minus)
+print("Result: ",minus)

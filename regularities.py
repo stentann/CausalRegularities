@@ -31,32 +31,36 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
 
     return True
 
+def getDataset(fileName):
+    # load data
+    dataReader = open(fileName, "r")
+    dataSet = {}
+    lineCount = 0
+    columns = {}
+    effects = []
+    for line in dataReader:
+        dataSet[lineCount] = line
+        if lineCount == 0:
+            effects = line.split()
+        else:
+            newDict = {}
+            newline = line.split()
+            elementCounter = 0
+            for element in newline:
+                if elementCounter != 0:
+                    newDict[effects[elementCounter - 1]] = int(newline[elementCounter])
+                elementCounter = elementCounter + 1
+            columns[newline[0]] = newDict
+        lineCount = lineCount + 1
+    print(effects)
+    # print(columns)
+
+    return dataSet, effects, columns
 
 
-#load data
-#fileName = input("Enter the name of your dataset: ")
+# fileName = input("Enter the name of your dataset: ")
 fileName = 'testFile.txt'
-dataReader = open(fileName, "r")
-dataSet = {}
-lineCount = 0
-columns = {}
-effects = []
-for line in dataReader :
-    dataSet[lineCount] = line
-    if lineCount == 0 :
-        effects = line.split()
-    else:
-        newDict = {}
-        newline = line.split()
-        elementCounter = 0
-        for element in newline :
-            if elementCounter != 0 :
-                newDict[effects[elementCounter - 1]] = int(newline[elementCounter])
-            elementCounter = elementCounter + 1
-        columns[newline[0]] = newDict
-    lineCount = lineCount + 1
-print(effects)        
-#print(columns)
+dataSet, effects, columns = getDataset(fileName)
 
 chosen_effect = input("Enter the desired effect: ")
 
@@ -142,5 +146,6 @@ for effect in effects:
 #                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
 #                     minus.append(matches)
                     
+
 
 print("Result: ",minus)

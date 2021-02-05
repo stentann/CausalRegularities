@@ -16,9 +16,11 @@ def basicMinusConditionTestUnitTest():
     for minusCondition in failingMinusConditions:
         if regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
             testPassed = False
+            print("%s failed", minusCondition)
     for minusCondition in passingMinusConditions:
         if not regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
             testPassed = False
+            print("%s failed", minusCondition)
     return testPassed
 
 def main():

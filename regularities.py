@@ -27,6 +27,7 @@ def basicMinusConditionTest(condition, data, predicates, thisEffect):
                                     inusMet += 1
                         elementNumber += 1
                 if inusMet == len(condition):
+                    print(f"failed sufficient test, inusMet: {inusMet}")
                     return False
 
     return True
@@ -36,31 +37,31 @@ def getDataset(fileName):
     dataReader = open(fileName, "r")
     dataSet = {}
     lineCount = 0
-    columns = {}
-    effects = []
+    rows = {}
+    predicates = []
     for line in dataReader:
         dataSet[lineCount] = line
         if lineCount == 0:
-            effects = line.split()
+            predicates = line.split()
         else:
             newDict = {}
             newline = line.split()
             elementCounter = 0
             for element in newline:
                 if elementCounter != 0:
-                    newDict[effects[elementCounter - 1]] = int(newline[elementCounter])
+                    newDict[predicates[elementCounter - 1]] = int(newline[elementCounter])
                 elementCounter = elementCounter + 1
-            columns[newline[0]] = newDict
+            rows[newline[0]] = newDict
         lineCount = lineCount + 1
-    print(effects)
+    print(predicates)
     # print(columns)
 
-    return dataSet, effects, columns
+    return dataSet, predicates, rows
 
 
 # fileName = input("Enter the name of your dataset: ")
 fileName = 'testFile.txt'
-dataSet, effects, columns = getDataset(fileName)
+dataSet, predicates, rows = getDataset(fileName)
 
 chosen_effect = input("Enter the desired effect: ")
 
@@ -69,7 +70,7 @@ minus = []
 #print(columns.items())
 positive_row = []
 
-for rowVal1, rowData1 in columns.items():
+for rowVal1, rowData1 in rows.items():
     if rowData1[chosen_effect] == 1:
         positive_row.append(rowVal1)
     
@@ -81,16 +82,16 @@ for rowVal1, rowData1 in columns.items():
 #print(cur_val)
 #flag = 0
 matchset = set()
-for effect in effects:
+for effect in predicates:
     if effect != chosen_effect:
-        cur_val = columns[positive_row[0]][effect] # set value -1 or 1
+        cur_val = rows[positive_row[0]][effect] # set value -1 or 1
         #matchset = set() #individual matches
         flag = 0
         #iterate through a columns row, raise flag if values do not equal
         for row in positive_row:
             rowMatch = set()
             if flag == 0:
-                temp = columns[row][effect]
+                temp = rows[row][effect]
                 if temp != cur_val:
                     flag = 1
             #cur_val = temp
@@ -118,7 +119,7 @@ for effect in effects:
         if matches.issubset(conditions) :
             minus.remove(conditions)
     if valid:
-        if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
+        if basicMinusConditionTest(matches, dataSet, predicates, chosen_effect):
             minus.append(matches)
 
 

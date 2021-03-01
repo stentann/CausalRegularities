@@ -5,6 +5,10 @@ def basicMinusConditionTestUnitTest():
     #large dataset test
     data, predicates, columns = regularities.getDataset("testfile.txt")
 
+    print(f"predicates: {predicates}")
+    print(f"cols: {columns}")
+    print(f"data: {data}")
+
     #choose effect
     chosenEffet = "Q"
     #create various testable minus conditions

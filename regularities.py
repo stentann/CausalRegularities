@@ -148,3 +148,5 @@ if __name__ == '__main__':
 #             if valid:
 #                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
 #                     minus.append(matches)
+
+necessaryCheck(minus, dataSet, effects, chosen_effect)

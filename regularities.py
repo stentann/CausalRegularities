@@ -140,29 +140,4 @@ if __name__ == '__main__':
 
     print("Result: ",minus)
 
-
-#     for rowVal2, rowData2 in columns.items():
-#         if rowData1[chosen_effect] > 0 and rowData2[chosen_effect] > 0 and rowVal1 != rowVal2:
-#             matches = set()
-#             for effect in effects:
-#                 if rowData1[effect] == rowData2[effect] and effect != chosen_effect:
-#                     if rowData1[effect] < 0:
-#                         matches.add(('~' + effect))
-#                     else:
-#                         matches.add(effect)
-#             #don't add if a super-set
-#             valid = True
-#             minus_temp = minus.copy()
-#             for conditions in minus_temp:
-#                 print(matches)
-#                 if matches.issuperset(conditions):
-#                     valid = False
-#                     break
-#                 #checks if previously added elements are supersets
-#                 if matches.issubset(conditions) :
-#                     minus.remove(conditions)
-#             if valid:
-#                 if basicMinusConditionTest(matches, dataSet, effects, chosen_effect):
-#                     minus.append(matches)
-
 necessaryCheck(minus, dataSet, effects, chosen_effect)

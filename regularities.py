@@ -140,4 +140,4 @@ if __name__ == '__main__':
 
     print("Result: ",minus)
 
-necessaryCheck(minus, dataSet, effects, chosen_effect)
+    necessaryCheck(minus, dataSet, predicates, chosen_effect)

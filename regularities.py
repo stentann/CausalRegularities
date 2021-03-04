@@ -1,3 +1,19 @@
+def necessaryCheck(minus, data, predicates, chosen) :
+    newMinus = []
+    for condition in minus:
+        newList = list(condition)
+        copy = newList.copy()
+        newList.reverse()
+        for effect in newList :
+            if(len(copy) == 1) :
+                newMinus.append(copy)
+                break
+            copy.remove(effect)
+            conditionHolds = basicMinusConditionTest(copy, data, predicates, chosen)
+            if conditionHolds == False:
+                copy.append(effect)
+                newMinus.append(copy)
+                break
 #tests the given minus condition against all rows of data, returns true if no line violates the condition
 def basicMinusConditionTest(condition, data, predicates, thisEffect):
     effectIndex = 0

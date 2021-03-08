@@ -11,13 +11,13 @@ def necessaryCheck(minus, data, predicates, chosen) :
                 newMinus.append(copy)
                 break
             copy.remove(effect)
-            conditionHolds = basicMinusConditionTest(copy, data, predicates, chosen)
+            conditionHolds = sufficientCheck(copy, data, predicates, chosen)
             if conditionHolds == False:
                 copy.append(effect)
                 newMinus.append(copy)
                 break
 #tests the given minus condition against all rows of data, returns true if no line violates the condition
-def basicMinusConditionTest(condition, data, predicates, thisEffect):
+def sufficientCheck(condition, data, predicates, thisEffect):
     effectIndex = 0
     for predicate in predicates:
         if predicate == thisEffect:
@@ -138,7 +138,7 @@ if __name__ == '__main__':
                     if matches.issubset(conditions) :
                         minus.remove(conditions)
                 if valid:
-                    if basicMinusConditionTest(matches, dataSet, predicates, chosen_effect):
+                    if sufficientCheck(matches, dataSet, predicates, chosen_effect):
                         minus.append(matches)
 print("Result: ",minus)
 #necessaryCheck(minus, dataSet, predicates, chosen_effect)

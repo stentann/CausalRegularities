@@ -1,6 +1,6 @@
 import regularities
 
-def basicMinusConditionTestUnitTest():
+def sufficientCheckUnitTest():
     testPassed = True
     #large dataset test
     data, predicates, columns = regularities.getDataset("testfile.txt")
@@ -30,5 +30,5 @@ def basicMinusConditionTestUnitTest():
     return testPassed
 
 if __name__ =='__main__':
-    basicMinusConditionTestUnitTestPassed = basicMinusConditionTestUnitTest()
-    print("\nbasicMinusConditionTestUnitTest\npassed: ", basicMinusConditionTestUnitTestPassed)
+    sufficientCheckUnitTestPassed = sufficientCheckUnitTest()
+    print("\nsufficientCheckUnitTest\npassed: ", sufficientCheckUnitTestPassed)

@@ -75,16 +75,36 @@ def getDataset(fileName):
     # print(columns)
 
     return dataSet, predicates, rows
-    
-def find_all_subsets(rows, chosenEffect):
+
+import ast
+def find_all_subsets(rows, predicates, chosenEffect):
     positive_rows = []
-    subsets = []
+    subsets = set()
     
     for row in rows:
-        if row[chosen_effect] == 1:
-            s = list(row)
-            rowSubsets = chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-            subsets.append(rowSubsets)
+        row = rows.get(row)
+        #create set of events in the row, add all of its subsets to the master list
+        idx = 0
+        row_set = set()
+        for predicate in predicates:
+            if predicate != chosenEffect:
+                dataItem = ""
+                if row.get(predicate) == -1:
+                    dataItem = "~"
+                row_set.add(dataItem + predicate)
+                idx += 1
+
+        rowSubsets = set(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
+        subsets.add(rowSubsets)
+
+    #TODO: remove empty subsets and duplicates
+    list(subsets)
+    print(f"subsets: {subsets}")
+
+        # if row[chosen_effect] == 1:
+        #     s = list(row)
+        #     rowSubsets = chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+        #     subsets.append(rowSubsets)
     
     return subsets
        
@@ -97,10 +117,8 @@ if __name__ == '__main__':
     #TODO: turn dataset into "~P, Q, ~R" format and fix find_all_subsets to remove subsets w/ effect and duplicates
 
     chosen_effect = input("Enter the desired effect: ")
-    print("rows")
-    for row in rows:
-        print(rows.get(row))
-    untestedConditions = find_all_subsets(rows, chosen_effect)
+
+    untestedConditions = find_all_subsets(rows, predicates, chosen_effect)
 
     minus = []
     for rowVal1, rowData1 in rows.items():

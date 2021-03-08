@@ -85,27 +85,22 @@ def find_all_subsets(rows, predicates, chosenEffect):
         row = rows.get(row)
         #create set of events in the row, add all of its subsets to the master list
         idx = 0
-        row_set = set()
+        row_set = []
         for predicate in predicates:
             if predicate != chosenEffect:
                 dataItem = ""
                 if row.get(predicate) == -1:
                     dataItem = "~"
-                row_set.add(dataItem + predicate)
+                row_set.append(dataItem + predicate)
                 idx += 1
 
-        rowSubsets = set(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
-        subsets.add(rowSubsets)
+        #create all subsets for this row
+        rowSubsets = list(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
+        for subset in rowSubsets:
+            subsets.add(tuple(subset))
 
-    #TODO: remove empty subsets and duplicates
-    list(subsets)
-    print(f"subsets: {subsets}")
-
-        # if row[chosen_effect] == 1:
-        #     s = list(row)
-        #     rowSubsets = chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-        #     subsets.append(rowSubsets)
-    
+    subsets.remove(())
+    #returns a set of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
     return subsets
        
 

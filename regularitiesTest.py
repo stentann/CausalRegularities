@@ -3,11 +3,7 @@ import regularities
 def sufficientCheckUnitTest():
     testPassed = True
     #large dataset test
-    data, predicates, columns = regularities.getDataset("testfile.txt")
-
-    print(f"predicates: {predicates}")
-    print(f"cols: {columns}")
-    print(f"data: {data}")
+    data, predicates, rows = regularities.getDataset("testfile.txt")
 
     #choose effect
     chosenEffet = "Q"
@@ -19,12 +15,12 @@ def sufficientCheckUnitTest():
 
     print("\nTesting \"False\" outputs")
     for minusCondition in failingMinusConditions:
-        if regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
+        if regularities.sufficientCheck(minusCondition, data, predicates, chosenEffet):
             testPassed = False
             print("{} failed".format(minusCondition))
     print("\nTesting \"True\" outputs")
     for minusCondition in passingMinusConditions:
-        if not regularities.basicMinusConditionTest(minusCondition, data, predicates, chosenEffet):
+        if not regularities.sufficientCheck(minusCondition, data, predicates, chosenEffet):
             testPassed = False
             print("{} failed".format(minusCondition))
     return testPassed

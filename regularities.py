@@ -140,7 +140,7 @@ if __name__ == '__main__':
                 if valid:
                     if sufficientCheck(matches, dataSet, predicates, chosen_effect):
                         minus.append(matches)
-print("Result: ",minus)
+    print("Result: ",minus)
 #necessaryCheck(minus, dataSet, predicates, chosen_effect)
 
 ##### To be removed (all below) #####

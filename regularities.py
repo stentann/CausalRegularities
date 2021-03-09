@@ -1,29 +1,33 @@
 from itertools import chain, combinations
 
-def necessaryCheck(minus, data, predicates, chosen) :
+def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
     newMinus = []
-    for condition in minus:
+    for condition in conditions:
         newList = list(condition)
         copy = newList.copy()
         newList.reverse()
-        for effect in newList :
+        for conjunct in newList :
             if(len(copy) == 1) :
                 newMinus.append(copy)
                 break
-            copy.remove(effect)
-            conditionHolds = sufficientCheck(copy, data, predicates, chosen)
-            if conditionHolds == False:
-                copy.append(effect)
+            copy.remove(conjunct)
+            conditionHolds = sufficientCheck(copy, dataSet, predicates, chosenEffect)
+            if conditionHolds:
+                print("conjunct not necessary")
+            if not conditionHolds:
+                copy.append(conjunct)
                 newMinus.append(copy)
                 break
+
+    return newMinus
+
 #tests the given minus condition against all rows of data, returns true if no line violates the condition
-def sufficientCheck(condition, data, predicates, thisEffect):
+def sufficientCheck(condition, data, predicates, chosenEffect):
     effectIndex = 0
     for predicate in predicates:
-        if predicate == thisEffect:
+        if predicate == chosenEffect:
             break
         effectIndex += 1
-
 
     for lineNumber in range(len(data)):
         if lineNumber > 0:
@@ -71,13 +75,10 @@ def getDataset(fileName):
                 elementCounter = elementCounter + 1
             rows[newline[0]] = newDict
         lineCount = lineCount + 1
-    print(predicates)
-    # print(columns)
 
     return dataSet, predicates, rows
 
-import ast
-def find_all_subsets(rows, predicates, chosenEffect):
+def findAllSubsets(rows, predicates, chosenEffect):
     positive_rows = []
     subsets = set()
     
@@ -86,17 +87,17 @@ def find_all_subsets(rows, predicates, chosenEffect):
         if row.get(chosenEffect) == 1:
             #create set of events in the row, add all of its subsets to the master list
             idx = 0
-            row_set = []
+            rowSet = []
             for predicate in predicates:
                 if predicate != chosenEffect:
                     dataItem = ""
                     if row.get(predicate) == -1:
                         dataItem = "~"
-                    row_set.append(dataItem + predicate)
+                    rowSet.append(dataItem + predicate)
                     idx += 1
 
             #create all subsets for this row
-            rowSubsets = list(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
+            rowSubsets = list(chain.from_iterable(combinations(rowSet, r) for r in range(len(rowSet) + 1)))
             for subset in rowSubsets:
                 subsets.add(tuple(subset))
 
@@ -105,23 +106,71 @@ def find_all_subsets(rows, predicates, chosenEffect):
     #returns a list of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
     #the list is in order from smallest to largest subsets
     return subsets
-       
+
+# def generateDisjunction(untestedConditions):
+#     #for condition in untestedConditions
+#         #check if it's a superset of proven condition
+#         #check if it's sufficient
+#         #check if it's necessary to go through the necessary check
+#     provenConditions = {}
+#
+#     for condition in untestedConditions:
+#         passedSupersetCheck = 1
+#         for provenCondition in provenConditions:
+#             if set(condition).issuperset(provenCondition):
+#                 passedSupersetCheck = 0
+#                 break
+#         if passedSupersetCheck:
+#             if sufficientCheck(condition, dataSet, predicates, chosenEffect):
+#
+#     return provenConditions
+
+def generateDisjunctionWithNecessary(untestedConditions, dataSet, predicates, chosenEffect):
+    #for condition in untestedConditions
+    #check if it's a superset of proven condition
+    #check if it's sufficient
+    #check if each conjunct is necessary
+    provenConditions = []
+
+    for condition in untestedConditions:
+        passedSupersetCheck = 1
+        for provenCondition in provenConditions:
+            if set(condition).issuperset(provenCondition):
+                passedSupersetCheck = 0
+                break
+        if passedSupersetCheck:
+            if sufficientCheck(condition, dataSet, predicates, chosenEffect):
+                provenConditions.append(condition)
+
+    provenConditions = necessaryCheck(provenConditions, dataSet, predicates, chosenEffect)
+
+    return provenConditions
 
 if __name__ == '__main__':
     # fileName = input("Enter the name of your dataset: ")
     fileName = 'testFile.txt'
     dataSet, predicates, rows = getDataset(fileName)
 
-    chosen_effect = input("Enter the desired effect: ")
+    print(predicates)
+    chosenEffect = input("Enter the desired effect: ")
 
-    untestedConditions = find_all_subsets(rows, predicates, chosen_effect)
-
+    untestedConditions = findAllSubsets(rows, predicates, chosenEffect)
     print(f"untested: {untestedConditions}")
+
+    # provenConditions = generateDisjunction(untestedConditions)
+    # print(f"proven (no necessary): {provenConditions}")
+
+    provenConditions = generateDisjunctionWithNecessary(untestedConditions, dataSet, predicates, chosenEffect)
+    print(f"proven (no necessary): {provenConditions}")
+
+
+
+
 
     minus = []
     for rowVal1, rowData1 in rows.items():
         for rowVal2, rowData2 in rows.items():
-            if rowData1[chosen_effect] > 0 and rowData2[chosen_effect] > 0 and rowVal1 != rowVal2:
+            if rowData1[chosenEffect] > 0 and rowData2[chosenEffect] > 0 and rowVal1 != rowVal2:
                 matches = set()
                 
                 # if rowData1[predicate] < 0:
@@ -141,7 +190,7 @@ if __name__ == '__main__':
                     if matches.issubset(conditions) :
                         minus.remove(conditions)
                 if valid:
-                    if sufficientCheck(matches, dataSet, predicates, chosen_effect):
+                    if sufficientCheck(matches, dataSet, predicates, chosenEffect):
                         minus.append(matches)
     print("Result: ",minus)
 #necessaryCheck(minus, dataSet, predicates, chosen_effect)

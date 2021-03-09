@@ -83,24 +83,27 @@ def find_all_subsets(rows, predicates, chosenEffect):
     
     for row in rows:
         row = rows.get(row)
-        #create set of events in the row, add all of its subsets to the master list
-        idx = 0
-        row_set = []
-        for predicate in predicates:
-            if predicate != chosenEffect:
-                dataItem = ""
-                if row.get(predicate) == -1:
-                    dataItem = "~"
-                row_set.append(dataItem + predicate)
-                idx += 1
+        if row.get(chosenEffect) == 1:
+            #create set of events in the row, add all of its subsets to the master list
+            idx = 0
+            row_set = []
+            for predicate in predicates:
+                if predicate != chosenEffect:
+                    dataItem = ""
+                    if row.get(predicate) == -1:
+                        dataItem = "~"
+                    row_set.append(dataItem + predicate)
+                    idx += 1
 
-        #create all subsets for this row
-        rowSubsets = list(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
-        for subset in rowSubsets:
-            subsets.add(tuple(subset))
+            #create all subsets for this row
+            rowSubsets = list(chain.from_iterable(combinations(row_set, r) for r in range(len(row_set) + 1)))
+            for subset in rowSubsets:
+                subsets.add(tuple(subset))
 
     subsets.remove(())
-    #returns a set of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
+    subsets = sorted(list(subsets), key=len)
+    #returns a list of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
+    #the list is in order from smallest to largest subsets
     return subsets
        
 
@@ -109,11 +112,11 @@ if __name__ == '__main__':
     fileName = 'testFile.txt'
     dataSet, predicates, rows = getDataset(fileName)
 
-    #TODO: turn dataset into "~P, Q, ~R" format and fix find_all_subsets to remove subsets w/ effect and duplicates
-
     chosen_effect = input("Enter the desired effect: ")
 
     untestedConditions = find_all_subsets(rows, predicates, chosen_effect)
+
+    print(f"untested: {untestedConditions}")
 
     minus = []
     for rowVal1, rowData1 in rows.items():

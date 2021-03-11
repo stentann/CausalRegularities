@@ -89,6 +89,7 @@ def findAllSubsets(rows, predicates, chosenEffect):
             idx = 0
             rowSet = []
             for predicate in predicates:
+                #TODO: check for 0s
                 if predicate != chosenEffect:
                     dataItem = ""
                     if row.get(predicate) == -1:
@@ -115,6 +116,7 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
 
     for condition in untestedConditions:
         passedSupersetCheck = 1
+        #TODO replace this for loop with necessary code?
         for provenCondition in provenConditions:
             if set(condition).issuperset(provenCondition):
                 passedSupersetCheck = 0

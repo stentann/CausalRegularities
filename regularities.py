@@ -89,20 +89,21 @@ def findAllSubsets(rows, predicates, chosenEffect):
             idx = 0
             rowSet = []
             for predicate in predicates:
-                #TODO: check for 0s
                 if predicate != chosenEffect:
-                    dataItem = ""
-                    if row.get(predicate) == -1:
-                        dataItem = "~"
-                    rowSet.append(dataItem + predicate)
-                    idx += 1
+                    if row.get(predicate) != 0:
+                        dataItem = ""
+                        if row.get(predicate) == -1:
+                            dataItem = "~"
+                        rowSet.append(dataItem + predicate)
+                        idx += 1
 
             #create all subsets for this row
             rowSubsets = list(chain.from_iterable(combinations(rowSet, r) for r in range(len(rowSet) + 1)))
             for subset in rowSubsets:
                 subsets.add(tuple(subset))
 
-    subsets.remove(())
+    if () in subsets: 
+        subsets.remove(())
     subsets = sorted(list(subsets), key=len)
     #returns a list of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
     #the list is in order from smallest to largest subsets
@@ -128,10 +129,13 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     return provenConditions
 
 if __name__ == '__main__':
-    # fileName = input("Enter the name of your dataset: ")
-    fileName = 'testFile.txt'
+    #TODO: accept dataset name input from GUI
+
+    fileName = input("Enter the name of your dataset: ")
+    # fileName = 'testFile.txt'
     dataSet, predicates, rows = getDataset(fileName)
 
+    #TODO: have GUI retrieve possible predicates and respond with desired predicate
     print(predicates)
     chosenEffect = input("Enter the desired effect: ")
 
@@ -139,3 +143,4 @@ if __name__ == '__main__':
 
     provenConditions = generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect)
     print(f"proven conditions: {provenConditions}")
+    #TODO: write proven conditions to output.txt

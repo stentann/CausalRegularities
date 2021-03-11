@@ -1,7 +1,4 @@
 import regularities
-import sufficientTest
-import necessaryTest
-import minusGenerationTest
 import argparse
 
 def sufficientCheckUnitTest():
@@ -29,10 +26,36 @@ def sufficientCheckUnitTest():
             print("{} failed".format(minusCondition))
     return testPassed
 
+def fullAlgorithmTest():
+    testPassed = True
+    #testFile3.txt test
+    data, predicates, rows = regularities.getDataset("testFile3.txt")
+    
+    testCases = ["P", "Q", "R", "S", "Z"]
+    
+    correctOutputs = {"P": [('~Q', '~R'), ('~Q', '~S'), ('T',), ('~U',)],
+        "Q": [('~P', '~S'), ('~S', 'U'), ('~R', '~T'), ('~R', 'U'), ('~P', '~R'), ('~S', '~T')],
+        "R": [('S',), ('~Q', 'U'), ('~P', '~Q'), ('~Q', '~T')],
+        "S": [('R',), ('~Q', 'U'), ('~Q', '~T'), ('~P', '~Q')],
+        "Z": []}
+    
+    for effect in testCases:
+        untestedConditions = regularities.findAllSubsets(rows, predicates, effect)
+        provenConditions = regularities.generateDisjunction(untestedConditions, data, predicates, effect)
+        
+        correctOutput = correctOutputs[effect].sort()
+        provenConditions = provenConditions.sort()
+        
+        if correctOutputs[effect] != provenConditions:
+            print(f"Algorithm test failed.")
+            print(f"Correct")
+        #TODO finish this
+    
+
 def parseArgs():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-test", type=string, help="type of test. Options: all, sufficient, generation"
+    parser.add_argument("-test", help="type of test. Options: all, sufficient, generation"
                                                     " (str) [default: all]", default="all")
 
     return parser.parse_args()
@@ -71,5 +94,4 @@ if __name__ == '__main__':
 
     elif args.test == 'generation':
         print("Generation test not implemented")
-
 

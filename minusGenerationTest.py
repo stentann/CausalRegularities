@@ -1,67 +1,34 @@
+import regularities
 # unit test to check creation of valid minus conditions
 
-
-
-# ****** ONLY FOR CHOSEN EFFECT Q ******
-def minusTest(conditionList){
-    
-    valid = {{P, R, ~S, ~T, U}, {P, ~R, ~S, ~T, U}, }
-    print("valid conditions:")
-    for element in valid{
-        print(element)    
-    }
-    
+def findAllSubsetsCheck():
     testPassed = True
-    for condition in conditionList{
-        if condition not in valid{
-             print("invalid condition:")
-             print(condition)
-             pass = False
-        }  
-    }
-    
-    return testPassed    
-}
+    #get dataset
+    data, predicates, rows = regularities.getDataset("testfile.txt")
 
+    #choose effect
+    chosenEffect = "S"
 
-# ****** ONLY FOR CHOSEN EFFECT P ******
-def minusTest2(conditionList){
-    
-    valid = {{~Q, ~R, ~S}, {Q, ~R, S}}
-    print("valid conditions:")
-    for element in valid{
-        print(element)    
-    }
-    
-    testPassed = True
-    for condition in conditionList{
-        if condition not in valid{
-             print("invalid condition")
-             print(condition)
-             pass = False
-        }  
-    }
+    #create various testable minus conditions
+    failingMinusConditions = [{"P", "~Q", "T", "Z"}, {"~P", "~Q", "R", "~T", "U", "~Z"}]
+
+    passingMinusConditions = [{"P", "~Q", "T"}, {"~P", "~Q", "R", "~T", "U"}]
+
+    generatedConditions = regularities.findAllSubsets(rows, predicates, chosenEffect)
+
+    #print("generatedConditions: ")
+    #print(generatedConditions)
+
+    print("\nTesting \"False\" outputs")
+    for minusCondition in failingMinusConditions:
+        if minusCondition.issubset(generatedConditions):
+            testPassed = False
+            print("{} failed".format(minusCondition))
+    print("\nTesting \"True\" outputs")
+    for minusCondition in passingMinusConditions:
+        if not minusCondition.issubset(generatedConditions):
+            testPassed = False
+            print("{} failed".format(minusCondition))
     return testPassed
-}
 
-
-fileName = input("Enter the name of your dataset: ")
-result = {}
-
-if fileName == "testFile.txt"{
-    result = generateMC(fileName)
-    valid = minusTest(result)
-    print("Test passed?")
-    print(valid)
-}
-
-if fileName == "testFile2.txt"{
-    result = generateMC(fileName)
-    valid = minusTest(result)
-    print("Test passed?")
-    print(valid)
-}
-
-
-
-
+passed = findAllSubsetsCheck()

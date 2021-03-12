@@ -1,25 +1,34 @@
 from itertools import chain, combinations
 
 def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
+     conditions = list(conditions)
     newMinus = []
     for condition in conditions:
-        newList = list(condition)
-        copy = newList.copy()
-        newList.reverse()
-        for conjunct in newList :
-            if(len(copy) == 1) :
-                newMinus.append(copy)
-                break
-            copy.remove(conjunct)
-            conditionHolds = sufficientCheck(copy, dataSet, predicates, chosenEffect)
-            if conditionHolds:
-                print("conjunct not necessary")
-            if not conditionHolds:
-                copy.append(conjunct)
-                newMinus.append(copy)
-                break
+        flag = 0
+        condition = list(condition)
+        if len(condition) == 1 :
+             conditionHolds = sufficientCheck(condition, dataSet, predicates, chosenEffect)
+             if conditionHolds:
+                newMinus.append(condition)
+        else :
+            minuscond = []
+            copy = condition.copy()
+            for effect in condition:
+                copy.remove(effect)
+                conditionHolds = sufficientCheck(copy, dataSet, predicates, chosenEffect)
+                if conditionHolds == False:
+                    minuscond.append(effect)
+                copy.append(effect)
+            if minuscond != [] and len(minuscond) != 1:
+                newMinus.append(minuscond)
+                    
+##    remove duplicates
+    result = [] 
+    for i in newMinus: 
+        if i not in result: 
+            result.append(i)
+    return result
 
-    return newMinus
 
 #tests the given minus condition against all rows of data, returns true if no line violates the condition
 def sufficientCheck(condition, data, predicates, chosenEffect):
@@ -108,6 +117,17 @@ def findAllSubsets(rows, predicates, chosenEffect):
     #returns a list of tuples containing all subsets in the dataset that dont contain the chosen effect, and aren't empty
     #the list is in order from smallest to largest subsets
     return subsets
+
+def generateDisjunctionWithoutSupersets(untestedConditions, dataSet, predicates, chosenEffect):
+    #for condition in untestedConditions
+    #check if it's a superset of proven condition
+    #check if it's sufficient
+    provenConditions = []
+    for condition in untestedConditions:
+        if sufficientCheck(condition, dataSet, predicates, chosenEffect):
+            provenConditions.append(condition)
+
+    return provenConditions
 
 def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     #for condition in untestedConditions

@@ -50,7 +50,38 @@ def fullAlgorithmTest():
             print(f"Algorithm test failed.")
             print(f"Correct")
         #TODO finish this
+            
+def necessaryCheckTest():
+    testPassed = True
+    #testFile3.txt test
+    data, predicates, rows = regularities.getDataset("testFile3.txt")
     
+    testCases = ["P", "Q", "R", "S", "Z"]
+    
+    correctOutputs = {"P": [['~Q', '~R'], ['~Q', '~S'], ['T'], ['~U']],
+        "Q": [['~P', '~S'], ['~S', 'U'], ['~R', '~T'], ['~R', 'U'], ['~P', '~R'], ['~S', '~T']],
+        "R": [['S'], ['~Q', 'U'], ['~P', '~Q'], ['~Q', '~T']],
+        "S": [['R'], ['~Q', 'U'], ['~Q', '~T'], ['~P', '~Q']],
+        "Z": []}
+    for effect in testCases:
+        untestedConditions = regularities.findAllSubsets(rows, predicates, effect)
+        provenConditions = regularities.generateDisjunctionWithoutSupersets(untestedConditions, data, predicates, effect)
+        provenConditions = regularities.necessaryCheck(provenConditions, data, predicates, effect)
+        correctOutput = correctOutputs[effect]
+        print(correctOutput)
+        correctOutput.sort(key=len)
+        provenConditions.sort(key=len)
+        check =  all(item in correctOutput for item in provenConditions)
+        if check == False:
+            testPassed = False
+            print(f"Algorithm test failed for effect " + effect)
+            print("Expected output: ")
+            print(correctOutputs[effect])
+            print("Output recieved: ")
+            print(provenConditions)
+        else :
+            print(f"Correct Output recieved for effect: " + effect)
+    return testPassed
 
 def parseArgs():
     parser = argparse.ArgumentParser()
@@ -75,9 +106,7 @@ if __name__ == '__main__':
             print("Necessary Unit Test Passed")
         else:
             print("Necessary Unit Test Failed")
-
-        print("Generation test not implemented")
-
+            
     elif args.test == 'necessary':
         necessaryPassed = necessaryCheckTest()
         if necessaryPassed:
@@ -94,4 +123,5 @@ if __name__ == '__main__':
 
     elif args.test == 'generation':
         print("Generation test not implemented")
+
 

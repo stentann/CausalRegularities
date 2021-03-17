@@ -1,4 +1,4 @@
-CSCI 492 Senior Project
+**CSCI 492 Senior Project**
 
 Amber Meinke
 Steven Tanner

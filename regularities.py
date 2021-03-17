@@ -1,5 +1,6 @@
 from itertools import chain, combinations
 
+#takes a lis of potential minus conditions and returns the same list without any unecessary conjuncts
 def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
     conditions = list(conditions)
     newMinus = []
@@ -22,7 +23,7 @@ def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
             if minuscond != [] and len(minuscond) != 1:
                 newMinus.append(minuscond)
                     
-##    remove duplicates
+    #remove duplicates
     result = [] 
     for i in newMinus: 
         if i not in result: 
@@ -49,20 +50,20 @@ def sufficientCheck(condition, data, predicates, chosenEffect):
                     elementNumber = 0
                     for lineElement in lineElements:
                         if elementNumber > 0:
-                            #negative inus
+                            #negative conjunct
                             if list(conjunct)[0] == "~":
                                 if list(conjunct)[1] == predicates[elementNumber - 1] and int(lineElement) < 0:
                                     inusMet += 1
-                            #positive inus
+                            #positive conjunct
                             else:
                                 if list(conjunct)[0] == predicates[elementNumber - 1] and int(lineElement) > 0:
                                     inusMet += 1
                         elementNumber += 1
                 if inusMet == len(condition):
                     return False
-
     return True
 
+#returns a processed text dataset along with a list of predicates and a list of rows
 def getDataset(fileName):
     # load data
     dataReader = open(fileName, "r")
@@ -87,6 +88,7 @@ def getDataset(fileName):
 
     return dataSet, predicates, rows
 
+#returns a list of all unique subsets (which exclude the chosen efect) from rows where the chosen effect occurred
 def findAllSubsets(rows, predicates, chosenEffect):
     positive_rows = []
     subsets = set()
@@ -137,7 +139,7 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
 
     for condition in untestedConditions:
         passedSupersetCheck = 1
-        #TODO replace this for loop with necessary code?
+        #TODO test replacing this for with necessary code
         for provenCondition in provenConditions:
             if set(condition).issuperset(provenCondition):
                 passedSupersetCheck = 0

@@ -1,7 +1,7 @@
 from itertools import chain, combinations
 
 def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
-     conditions = list(conditions)
+    conditions = list(conditions)
     newMinus = []
     for condition in conditions:
         flag = 0

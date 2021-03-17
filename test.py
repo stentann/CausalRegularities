@@ -133,7 +133,7 @@ def findAllSubsetsCheck():
 def parseArgs():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-test", help="type of test. Options: all, sufficient, generation"
+    parser.add_argument("-test", help="type of test. Options: all, sufficient, generation, necessary"
                                                     " (str) [default: all]", default="all")
 
     return parser.parse_args()

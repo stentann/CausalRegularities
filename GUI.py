@@ -1,5 +1,6 @@
 import easygui as eg
 from os import sys
+import regularities
 
 while 1:
     #starting page
@@ -12,17 +13,24 @@ while 1:
     fieldNames = ["Data Set"]
     fieldValues = []  # we start with blanks for the values
     fieldValues = eg.multenterbox(msg,title, fieldNames)
-    #TODO: fieldValue[0] is dataset, send this to regularities.py
+    #TODO: fieldValues[0] is dataset, send this to regularities.py
 
     #select desired effect
-    choices = ["P", "Q", "S", "R"]
-    choice = eg.choicebox(msg, title, choices)
+    msg ="Choose desired predicate."
+    data, predicates, rows = regularities.getDataset(fieldValues[0])
+    choice = eg.choicebox(msg, title, predicates)
 
     #display results
-    f = open('output.txt', "r")
-    text = f.readlines()
-    f.close()
-    eg.codebox("Proven Conditions for " + str(choice), "Show File Contents", text)
+    untestedConditions = regularities.findAllSubsets(rows, predicates, choice)
+    provenConditions = regularities.generateDisjunction(untestedConditions, data, predicates, choice)
+    result_text = ""
+    for condition in provenConditions:
+        result_text = result_text + '(' + ', '.join(condition) + ')\n'
+    # f = open('output.txt', "r")
+    # text = f.readlines()
+    # f.close()
+    # eg.codebox("Proven Conditions for " + str(choice), "Show File Contents", text)
+    eg.codebox("Proven Conditions for " + str(choice), "Show File Contents", result_text)
 
     msg = "Do you want to continue?"
     title = "Please Confirm"

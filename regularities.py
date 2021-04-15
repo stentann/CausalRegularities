@@ -129,13 +129,11 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     return provenConditions
 
 if __name__ == '__main__':
-    #TODO: accept dataset name input from GUI
 
     fileName = input("Enter the name of your dataset: ")
     # fileName = 'testFile.txt'
     dataSet, predicates, rows = getDataset(fileName)
 
-    #TODO: have GUI retrieve possible predicates and respond with desired predicate
     print(predicates)
     chosenEffect = input("Enter the desired effect: ")
 
@@ -143,4 +141,3 @@ if __name__ == '__main__':
 
     provenConditions = generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect)
     print(f"proven conditions: {provenConditions}")
-    #TODO: write proven conditions to output.txt

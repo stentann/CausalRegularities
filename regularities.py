@@ -1,5 +1,5 @@
 from itertools import chain, combinations
-
+import getData
 #takes a lis of potential minus conditions and returns the same list without any unecessary conjuncts
 def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
     conditions = list(conditions)
@@ -151,7 +151,8 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     return provenConditions
 
 if __name__ == '__main__':
-
+    #TODO: accept dataframe format or whatever format from getData
+    
     fileName = input("Enter the name of your dataset: ")
     # fileName = 'testFile.txt'
     dataSet, predicates, rows = getDataset(fileName)

@@ -1,6 +1,7 @@
 from itertools import chain, combinations
-import getData
-#takes a lis of potential minus conditions and returns the same list without any unecessary conjuncts
+from GetData import GetDataClass
+
+#takes a list of potential minus conditions and returns the same list without any unecessary conjuncts
 def necessaryCheck(conditions, dataSet, predicates, chosenEffect) :
     conditions = list(conditions)
     newMinus = []
@@ -88,7 +89,7 @@ def getDataset(fileName):
 
     return dataSet, predicates, rows
 
-#returns a list of all unique subsets (which exclude the chosen efect) from rows where the chosen effect occurred
+#returns a list of all unique subsets (which exclude the chosen effect) from rows where the chosen effect occurred
 def findAllSubsets(rows, predicates, chosenEffect):
     positive_rows = []
     subsets = set()
@@ -151,10 +152,20 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     return provenConditions
 
 if __name__ == '__main__':
-    #TODO: accept dataframe format or whatever format from getData
+    #TODO: accept dataframe format or whah
+    # tever format from getData
     
-    fileName = input("Enter the name of your dataset: ")
+    #fileName = input("Enter the name of your dataset: ")
+    fileName = "data/soybean-very-small.data"
+    print(f"Using \'{fileName}\'...")
+    
+    dataSet, predicates, rows = getDataset("testFile.txt")
+    print(f"test rows print")
+    print(rows)
+    
     # fileName = 'testFile.txt'
+    getDataClass = GetDataClass()
+    dataframe = getDataClass.loadAndModifyDataset(fileName)
     dataSet, predicates, rows = getDataset(fileName)
 
     print(predicates)

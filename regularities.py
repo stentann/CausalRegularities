@@ -160,8 +160,8 @@ if __name__ == '__main__':
     print(f"Using \'{fileName}\'...")
     
     dataSet, predicates, rows = getDataset("testFile.txt")
-    print(f"test rows print")
-    print(rows)
+    #print(f"test rows print")
+    #print(rows)
     
     # fileName = 'testFile.txt'
     getDataClass = GetDataClass()

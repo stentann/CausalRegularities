@@ -5,21 +5,20 @@ class GetDataClass:
         pass
  
     def loadAndModifyDataset(self, CSVfilename):
-        rawData = pd.read_csv(CSVfilename)
+        rawData = pd.read_csv(CSVfilename, header=None)
         cols = list(rawData)
         modifiedData = pd.DataFrame()
         modifiedIndex = 0
-        for idx, column in enumerate(cols):
-            #print("In for loop")
-            userinput = input(f"What do you want to do with column {idx}? (remove/one-hot/custom) : ")
+        for column in rawData.columns:
+            userinput = input(f"What do you want to do with column: \n{rawData[column]}\n(remove/one-hot/custom) : ")
             if (userinput == "remove") : # don't add column to new dataset
                 print("Column Removed")
             elif (userinput == "one-hot"): # add one-hot columns to new dataset
-                modifiedData[str(modifiedIndex)] = column
-                dummies = pd.get_dummies(modifiedData[str(modifiedIndex)], prefix='onehot')
+                dummies = pd.get_dummies(rawData[column], prefix='onehot')
+                print(dummies)
                 modifiedData = pd.concat([modifiedData, dummies], axis=1)
-                #modifiedData = pd.concat(pd.get_dummies(modifiedData[str(modifiedIndex)], prefix='onehot'), axis=1)
-                modifiedIndex+=1
+                print(len(dummies.columns))
+                modifiedIndex = modifiedIndex + len(dummies.columns)
             elif (userinput == "custom"): #prompt user for new column data. Format this data and update dataframe
                 newinput = input(f"Please enter new modified column data. Each new value should be seperated by a comma ")
                 newinput.strip()
@@ -39,16 +38,24 @@ class GetDataClass:
         predicates = []
 
         rawData = pd.read_csv(CSVfilename)
+        columnNames = list(rawData.columns)
         predicates = rawData.columns
-
+        rawData.rename(columns = {"" : "Idx"}, inplace=True)
+        columnNames = rawData.columns
         #put data into formatted dataSet and rows
-        for rowIdx, row in rawData.index:
+        for rowIdx, row in rawData.iterrows():
             rowDict = {}
-            rowData = rawData.loc[row, :]
+            rowData = rawData.iloc[[rowIdx]]
             dataSetRow = "\t"
             for elementIdx, element in enumerate(rowData):
-                dataSetRow += str(element) + "\t"
-                rowDict[predicates[elementIdx - 1]] = int(rowData[elementIdx])
+                if elementIdx != 0:
+                    colName = columnNames[elementIdx]
+                    print(colName)
+                    dataSetRow += str(element) + "\t"
+                    print('Test:')
+                    print(rowData[colName])
+                    print(rowData[colName][rowIdx])
+                    rowDict[predicates[elementIdx - 1]] = int(rowData[colName][rowIdx])
             dataSetRow += "\n"
             dataSet[rowIdx] = dataSetRow
             rows[rowIdx] = rowDict

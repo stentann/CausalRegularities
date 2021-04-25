@@ -40,9 +40,10 @@ def sufficientCheck(condition, data, predicates, chosenEffect):
             break
         effectIndex += 1
 
-    for lineNumber in range(len(data)):
+    for lineNumber in range(1,len(data)):
         if lineNumber > 0:
             lineElements = data[lineNumber].split()
+            print(lineElements)
             #only check rows where effect is false
             if int(lineElements[effectIndex + 1]) == -1:
                 #if all inus are met, the minus condition is proven false
@@ -159,16 +160,11 @@ if __name__ == '__main__':
     fileName = "data/soybean-very-small.data"
     print(f"Using \'{fileName}\'...")
     
-    dataSet, predicates, rows = getDataset("testFile.txt")
-    #print(f"test rows print")
-    #print(rows)
-    
-    # fileName = 'testFile.txt'
     getDataClass = GetDataClass()
-    dataframe = getDataClass.loadAndModifyDataset(fileName)
-    dataSet, predicates, rows = getDataset(fileName)
+    dataSet, predicates, rows = getDataClass.loadAndModifyDataset(fileName)
 
     print(predicates)
+    print(dataSet)
     chosenEffect = input("Enter the desired effect: ")
 
     untestedConditions = findAllSubsets(rows, predicates, chosenEffect)

@@ -43,7 +43,6 @@ def sufficientCheck(condition, data, predicates, chosenEffect):
     for lineNumber in range(1,len(data)):
         if lineNumber > 0:
             lineElements = data[lineNumber].split()
-            print(lineElements)
             #only check rows where effect is false
             if int(lineElements[effectIndex + 1]) == -1:
                 #if all inus are met, the minus condition is proven false
@@ -97,6 +96,8 @@ def findAllSubsets(rows, predicates, chosenEffect):
     
     for row in rows:
         row = rows.get(row)
+        print("Rows in findAllSubsets")
+        print(row)
         if row.get(chosenEffect) == 1:
             #create set of events in the row, add all of its subsets to the master list
             idx = 0
@@ -157,14 +158,21 @@ if __name__ == '__main__':
     # tever format from getData
     
     #fileName = input("Enter the name of your dataset: ")
-    fileName = "data/soybean-very-small.data"
+    #fileName = "data/soybean-very-small.data"
+    fileName = "testFile.txt"
     print(f"Using \'{fileName}\'...")
     
     getDataClass = GetDataClass()
     dataSet, predicates, rows = getDataClass.loadAndModifyDataset(fileName)
 
-    print(predicates)
+    print("Dataset:")
     print(dataSet)
+
+    print("Predicates:")
+    print(predicates)
+
+    #dataSet, predicates, rows = getDataClass.loadPreModifiedDataset("modified-data/soybean-very-small.data")
+    print(predicates)
     chosenEffect = input("Enter the desired effect: ")
 
     untestedConditions = findAllSubsets(rows, predicates, chosenEffect)

@@ -53,11 +53,11 @@ def sufficientCheck(condition, data, predicates, chosenEffect):
                         if elementNumber > 0:
                             #negative conjunct
                             if list(conjunct)[0] == "~":
-                                if list(conjunct)[1] == predicates[elementNumber - 1] and int(lineElement) < 0:
+                                if conjunct[1:] == predicates[elementNumber - 1] and int(lineElement) < 0:
                                     inusMet += 1
                             #positive conjunct
                             else:
-                                if list(conjunct)[0] == predicates[elementNumber - 1] and int(lineElement) > 0:
+                                if conjunct[:] == predicates[elementNumber - 1] and int(lineElement) > 0:
                                     inusMet += 1
                         elementNumber += 1
                 if inusMet == len(condition):
@@ -96,8 +96,6 @@ def findAllSubsets(rows, predicates, chosenEffect):
     
     for row in rows:
         row = rows.get(row)
-        print("Rows in findAllSubsets")
-        print(row)
         if row.get(chosenEffect) == 1:
             #create set of events in the row, add all of its subsets to the master list
             idx = 0
@@ -140,7 +138,10 @@ def generateDisjunction(untestedConditions, dataSet, predicates, chosenEffect):
     #check if it's sufficient
     provenConditions = []
 
-    for condition in untestedConditions:
+    print(f"Number of conditions to check: {len(untestedConditions)}")
+    for idx, condition in enumerate(untestedConditions):
+        if idx % 10000 == 0:
+            print(f"Conditions checked: {idx}")
         passedSupersetCheck = 1
         #TODO test replacing this for with necessary code
         for provenCondition in provenConditions:
@@ -158,18 +159,12 @@ if __name__ == '__main__':
     # tever format from getData
     
     #fileName = input("Enter the name of your dataset: ")
-    #fileName = "data/soybean-very-small.data"
-    fileName = "testFile.txt"
+    fileName = "data/soybean-very-small.data"
+    #fileName = "testFile2.txt"
     print(f"Using \'{fileName}\'...")
     
     getDataClass = GetDataClass()
     dataSet, predicates, rows = getDataClass.loadAndModifyDataset(fileName)
-
-    print("Dataset:")
-    print(dataSet)
-
-    print("Predicates:")
-    print(predicates)
 
     #dataSet, predicates, rows = getDataClass.loadPreModifiedDataset("modified-data/soybean-very-small.data")
     print(predicates)

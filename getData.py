@@ -43,10 +43,8 @@ class GetDataClass:
         modifiedData.replace(to_replace='0', value=-1, inplace=True)
         modifiedData.replace(to_replace='?', value=0, inplace=True)
         modifiedData = modifiedData.apply(pd.to_numeric)
-        print("\nModified Dataset:")
         print(modifiedData)
         modifiedData.to_csv(f"modified-{CSVfilename}")
-        print(f"\nModified dataset saved to modified-{CSVfilename}\n")
         dataSet, predicates, rows = self.loadPreModifiedDataset(f"modified-{CSVfilename}")
 
         return dataSet, predicates, rows
@@ -73,8 +71,8 @@ class GetDataClass:
                         sys.exit(f"Error loading modified dataset in column {elementIdx}, row {rowIdx} \
                         \nExpected -1, 0, or 1. Found {element} which is type {type(element)}\n")
                     colName = columnNames[elementIdx]
-                    dataSetRow += str(element) + "\t"
                     rowDict[predicates[elementIdx - 1]] = int(rowData[elementIdx])
+                dataSetRow += str(element) + "\t"
             dataSetRow += "\n"
             dataSet[rowIdx] = dataSetRow
             rows[rowIdx] = rowDict

@@ -9,5 +9,5 @@ Thomas Bidinger
 **To run the test Sets in your terminal:** python test.py (runs all tests by default)<br />
 **To specify which test to run:** --s [filename] where filename can be: neccessary, sufficient, generation, or all <br />
 
-Our related paper was published along with a presentation at the 34th International Conference on Computer Applications in Industry and Engineering (CAINE 2021).
+Our related paper was published in the EPiC series on computing, volume 79 along with a presentation at the 34th International Conference on Computer Applications in Industry and Engineering (CAINE 2021).
 It can be found at https://easychair.org/publications/paper/K8j7
